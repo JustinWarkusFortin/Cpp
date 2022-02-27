@@ -1,118 +1,76 @@
-﻿// CPPWeek2.cpp : Defines the entry point for the application.
+﻿#pragma once // CPPWeek2.cpp : Defines the entry point for the application.
 //
 
-#include "CPPWeek2.h"
-#include<iostream>
-using namespace std;
+
+#include "HybridVehicle.h"
+#include <vector>
+#include <iostream>
 
 
-class MySecondClass {
-public:
-	MySecondClass() {
-		cout << "In MySecondClass();" << endl;
-	}
+template<class T >
+T testVehicle(T pVehicle, const char* vehicleName)
+{
+	cout << vehicleName << "’s range is: " << pVehicle->calculateRange() << endl;
+	pVehicle->drive(150); //drive 150 km
+	cout << vehicleName << "’s energy left is: " << pVehicle->percentEnergyRemaining() << endl;
+	cout << vehicleName << "’s range is now: " << pVehicle->calculateRange() << endl;
 
-};
-
-class MyFirstClass {
-protected:
-	int age = 0;
-	char *firstName = "", *lastName = "";
-	MySecondClass second;
-public:							 //int,	char*,	  char*
-	MyFirstClass() : MyFirstClass(420, "Generic","Name") {
-		cout << "In myFirstClass()" << endl;
-	};
-	MyFirstClass(int a, char* f, char* l) {
-		setAge(a);
-		setFirstName(f);
-		setLastName(l);
-		cout << "In myFirstClass(int a, char* f, char* l)" << endl;
-	};
-
-	~MyFirstClass() {
-		cout << "In ~MyFirstClass()" << endl;
-	}
-	int getAge() { return age; }
-	
-protected:
-	void setAge(int a) { age = a; }
-	void setFirstName(char* f) { firstName = f; }
-	void setLastName(char* l) { lastName = l; }
-};
-namespace A {
-	namespace cst8219 {
-		int main(int argc, char** argv) {
-			cout << "Hello Worldception!" << endl;
-			return 0;
-		};
-	}
+	return pVehicle;
 }
 
-namespace CST8219 {
-
-	class Vehicle {
-	private:
-		int numWheels = 0, numDoors = 0;
-	public:
-		Vehicle(int w, int d) {
-			numWheels = w;
-			numDoors = d;
-
-			cout << "In constructor with 2 parameters" << endl;
+namespace Helper {
+	template<class T>
+	T min(T a, T b) {
+		if (a < b) {
+			return a;
 		}
+		return b;
+	};
+	template<class T>
+	T max(T a, T b) {
+		if (a > b) {
+			return a;
+		}
+		return b;
 
-		Vehicle(int w) : Vehicle(w, 4) {
-			cout << "In constructor with 1 parameter" << endl;
-		};
-
-		Vehicle() : Vehicle(4) {
-			cout << "In constructor with 0 parameters" << endl;
-		};
-
-		~Vehicle() {
-			cout << "In Destructor " << endl;
-		};
 	};
 }
-using namespace CST8219;
+using namespace std;
+void testTemplateLibrary() {
+	vector<float> vector{ 5.0f, 4.0f, 3.0f, 2.0f, 1.0f } ;
+
+	
+	for (int x : vector) {
+		cout << x << " ";
+	}
+	while (!vector.empty())
+	{
+		cout << endl << "Last Element : " << vector.back(); //print the last element
+		vector.pop_back(); // remove the last element
+	}
+
+}
 
 int main(int argc, char** argv)
-{
-	char choice = '2';
-	int d, w;
-	Vehicle v1;
-	Vehicle v2(4);
-	Vehicle v3(4, 2);
-	cout << "Vehicle takes "<< sizeof(v1) << endl;
-	cout << "Vehicle takes " << sizeof(v2) << endl;
-	cout << "Vehicle takes " << sizeof(v3) << endl;
-	Vehicle* pVehicle;
+{					//50L of gas, 7.1 L/100km
+	delete  testVehicle(new GasolineVehicle<float>(50, 7.1), "Corolla");
 
-	do {
-		cout << "New vehicle (any input) or q for quit" << endl;
-		cin >> choice;
-		if (choice == 'q') {
-			return 0;
-		}
-	DOOR:
-		cout << "Enter number of doors: " << endl;
-		cin >> d;
-		if (d < 0 || cin.fail()) {
-			cin.clear();
-			cin.ignore(10000, '\n');
-			goto DOOR;
-		}
-	WHEEL:
-		cout << "Enter number of wheels: " << endl;
-		cin >> w;
-		if (w < 0 || cin.fail()) {
-			cin.clear();
-			cin.ignore(10000, '\n');
-			goto WHEEL;
-		}
-		pVehicle = new Vehicle(d, w);
-		pVehicle->~Vehicle();
-	} while (choice != 'q');
+	//42 L of gas, 4.3 L/100km, 8.8kWh, 22 kWh/100km
+	delete testVehicle(new HybridVehicle<double>(42, 4.3, 8.8, 22.0), "Prius");
+
+	//75 kWh, 16 kWh/100km
+	delete testVehicle(new ElectricVehicle<int>(75, 16), "Tesla 3");
+
+	cout << "min of 5 and 7 is:" << Helper::min(5, 7) << endl;
+	cout << "max of 5 and 7 is:" << Helper::max(5, 7) << endl;
+
+	cout << "min of A and B is:" << Helper::min('A', 'B') << endl;
+	cout << "max of A and B is:" << Helper::max('A', 'B') << endl;
+
+	cout << "min of string(Hello) and string(world) is:" << Helper::min(string("Hello"), string("World")) << endl;
+	cout << "max of string(Hello) and string(world) is:" << Helper::max(string("Hello"), string("World")) << endl;
+	testTemplateLibrary();
 	return 0;
-} 
+}
+
+

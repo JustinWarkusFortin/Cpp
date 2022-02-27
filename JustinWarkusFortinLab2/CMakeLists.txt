@@ -3,9 +3,9 @@
 #
 cmake_minimum_required (VERSION 3.2)
 
-project ("CPPWeek3")
+project ("CPPWeek2")
 
 # Add source to this project's executable.
-add_executable (CPPWeek3 "CPPWeek2.cpp" "CPPWeek2.h" "Vehicle.h" "Vehicle.cpp"  "ElectricVehicle.cpp" "GasolineVehicle.cpp" "HybridVehicle.cpp" "HybridVehicle.h" "ElectricVehicle.h" "GasolineVehicle.h")
+add_executable (CPPWeek2 "CPPWeek2.cpp" "CPPWeek2.h")
 
 # TODO: Add tests and install targets if needed.
